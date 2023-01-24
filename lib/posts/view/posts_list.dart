@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_infinite_list/posts/bloc/post_bloc.dart';
-import 'package:flutter_infinite_list/posts/widgets/bottom_loader.dart';
-import 'package:flutter_infinite_list/posts/widgets/post_list_item.dart';
+import 'package:flutter_infinite_list/posts/posts.dart';
 
 class PostsList extends StatefulWidget {
   const PostsList({super.key});
@@ -23,23 +21,23 @@ class _PostsListState extends State<PostsList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PostBloc, PostState>(
-      builder: (context, state) {
-        switch (state.status) {
+      builder: (context, postState) {
+        switch (postState.status) {
           case PostStatus.failure:
             return const Center(child: Text('failed to fetch posts'));
           case PostStatus.success:
-            if (state.posts.isEmpty) {
+            if (postState.posts.isEmpty) {
               return const Center(child: Text('no posts'));
             }
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
-                return index >= state.posts.length
+                return index >= postState.posts.length
                     ? const BottomLoader()
-                    : PostListItem(post: state.posts[index]);
+                    : PostListItem(post: postState.posts[index]);
               },
-              itemCount: state.hasReachedMax
-                  ? state.posts.length
-                  : state.posts.length + 1,
+              itemCount: postState.hasReachedMax
+                  ? postState.posts.length
+                  : postState.posts.length + 1,
               controller: _scrollController,
             );
           case PostStatus.initial:

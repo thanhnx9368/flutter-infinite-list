@@ -12,7 +12,7 @@ part 'post_event.dart';
 part 'post_state.dart';
 
 const _postLimit = 20;
-const throttleDuration = Duration(milliseconds: 100);
+const throttleDuration = Duration(milliseconds: 2000);
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
